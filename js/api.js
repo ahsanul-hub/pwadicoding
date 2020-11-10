@@ -146,7 +146,82 @@ function showTeam(resources) {
     teamsElement.innerHTML = `
                     ${teams}
     `;
-    const item = getTeamsByID();
+    // const item = getTeamsByID();
+    // var save = document.getElementById("save");
+    // save.onclick = function() {
+    // console.log("Tombol FAB di klik.");
+    // item.then((data) => {
+    //     M.toast({ html: `${team.name} Berhasil menambahkan tim ini ke favorit` });
+    //     addFavTeam(data);
+    //   });
+    // }
+
+    
+}
+
+// function getTeamsByID() {
+//     return new Promise((resolve, reject) => {
+//       // Ambil nilai query parameter (?id=)
+//       const urlParams = new URLSearchParams(window.location.search);
+//       const idParam = urlParams.get("id");
+//       if ("caches" in window) {
+//         caches.match(ENDPOINT_TEAMS/idParam).then(function (response) {
+//             if (response) {
+//                 response.json().then(function (data) {
+//                     console.log("Teams Data: " + data);
+//                     showTeam(data);
+//                 })
+//             }
+//         })
+//     }
+
+//       fetch(ENDPOINT_TEAMS/idParam, {
+//         headers: {
+//           'X-Auth-Token': API_KEY,
+//         },
+//       })
+//         .then(status)
+//         .then(json)
+//         .then((data) => {
+//           showTeambyId(data);
+//             console.log(data);
+//           resolve(data);
+//         })
+//         .catch((error) => {
+//           console.log(error);
+//         });
+//     });
+//   }
+
+  function getTeambyId() {
+    var urlParams = new URLSearchParams(window.location.search);
+     var idParam = urlParams.get("id");
+    if ("caches" in window) {
+        caches.match(ENDPOINT_TEAMS).then(function (response) {
+            if (response) {
+                response.json().then(function (data) {
+                    console.log("Teams Data: " + data);
+                    showTeambyId(data);
+                })
+            }
+        })
+    }
+
+    fetchAPI(ENDPOINT_TEAMS/idParam)
+        .then(data => {
+            showTeambyId(data);
+            resolve(data);
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+    
+}
+
+function showTeambyId(data) {
+    
+    const item = getTeambyId();
     var save = document.getElementById("save");
     save.onclick = function() {
     console.log("Tombol FAB di klik.");
@@ -158,40 +233,6 @@ function showTeam(resources) {
 
     
 }
-
-function getTeamsByID() {
-    return new Promise((resolve, reject) => {
-      // Ambil nilai query parameter (?id=)
-      const urlParams = new URLSearchParams(window.location.search);
-      const idParam = urlParams.get("id");
-      if ("caches" in window) {
-        caches.match(ENDPOINT_TEAMS/idParam).then(function (response) {
-            if (response) {
-                response.json().then(function (data) {
-                    console.log("Teams Data: " + data);
-                    showTeam(data);
-                })
-            }
-        })
-    }
-
-      fetchAPI(ENDPOINT_TEAMS/idParam, {
-        headers: {
-          'X-Auth-Token': API_KEY,
-        },
-      })
-        .then(status)
-        .then(json)
-        .then((data) => {
-          showTeambyId(data);
-            console.log(data);
-          resolve(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  }
 
   function getSavedTeams() {
     getAllTeamFav()
