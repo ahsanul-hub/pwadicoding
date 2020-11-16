@@ -1,32 +1,32 @@
 
 const API_KEY = "12d909c11f6e43faaf6b24ea020d3b34";
-const BASE_URL = "https://api.football-data.org/";
+const BASE_URL = "https://api.football-data.org/v2/";
 
 const LEAGUE_ID = 2014;
 
-const ENDPOINT_COMPETITION = `${BASE_URL}v2/competitions/${LEAGUE_ID}/standings`;
-const ENDPOINT_TEAMS = `${BASE_URL}/v2/competitions/${LEAGUE_ID}/teams`;
-// function status(response) {
-//   if (response.status !== 200) {
-//     console.log("Error : " + response.status);
-//     // Method reject() akan membuat blok catch terpanggil
-//     return Promise.reject(new Error(response.statusText));
-//   } else {
-//     // Mengubah suatu objek menjadi Promise agar bisa "di-then-kan"
-//     return Promise.resolve(response);
-//   }
-// }
+const ENDPOINT_COMPETITION = `${BASE_URL}competitions/${LEAGUE_ID}/standings`;
+const ENDPOINT_TEAMS = `${BASE_URL}competitions/${LEAGUE_ID}/teams`;
+function status(response) {
+  if (response.status !== 200) {
+    console.log("Error : " + response.status);
+    // Method reject() akan membuat blok catch terpanggil
+    return Promise.reject(new Error(response.statusText));
+  } else {
+    // Mengubah suatu objek menjadi Promise agar bisa "di-then-kan"
+    return Promise.resolve(response);
+  }
+}
 
-// // Blok kode untuk memparsing json menjadi array JavaScript
-// function json(response) {
-//   return response.json();
-// }
+// Blok kode untuk memparsing json menjadi array JavaScript
+function json(response) {
+  return response.json();
+}
 
-// // Blok kode untuk meng-handle kesalahan di blok catch
-// function error(error) {
-//   // Parameter error berasal dari Promise.reject()
-//   console.log("Error : " + error);
-// }
+// Blok kode untuk meng-handle kesalahan di blok catch
+function error(error) {
+  // Parameter error berasal dari Promise.reject()
+  console.log("Error : " + error);
+}
   
 
 // const fetchAPI = ENDPOINT_COMPETITION => {
@@ -291,27 +291,27 @@ const ENDPOINT_TEAMS = `${BASE_URL}/v2/competitions/${LEAGUE_ID}/teams`;
 //         showSavedTeam(data);
 //       });
 //   }
-function status(response) {
-  if (response.status !== 200) {
-    console.log("Error : " + response.status);
-    // Method reject() akan membuat blok catch terpanggil
-    return Promise.reject(new Error(response.statusText));
-  } else {
-    // Mengubah suatu objek menjadi Promise agar bisa "di-then-kan"
-    return Promise.resolve(response);
-  }
-}
+// function status(response) {
+//   if (response.status !== 200) {
+//     console.log("Error : " + response.status);
+//     // Method reject() akan membuat blok catch terpanggil
+//     return Promise.reject(new Error(response.statusText));
+//   } else {
+//     // Mengubah suatu objek menjadi Promise agar bisa "di-then-kan"
+//     return Promise.resolve(response);
+//   }
+// }
 
-// Blok kode untuk memparsing json menjadi array JavaScript
-function json(response) {
-  return response.json();
-}
+// // Blok kode untuk memparsing json menjadi array JavaScript
+// function json(response) {
+//   return response.json();
+// }
 
-// Blok kode untuk meng-handle kesalahan di blok catch
-function error(error) {
-  // Parameter error berasal dari Promise.reject()
-  console.log("Error : " + error);
-}
+// // Blok kode untuk meng-handle kesalahan di blok catch
+// function error(error) {
+//   // Parameter error berasal dari Promise.reject()
+//   console.log("Error : " + error);
+// }
 const fetchAPI = url => {
     return fetch(url, {
         headers: {
@@ -439,7 +439,7 @@ function showTeam(resources) {
                     <div class="center"><a href="${team.website}" target="_blank">${team.website}</a></div>
                 </div>
                 <div class="card-action right-align">
-                    <a class="waves-effect waves-light btn-small teal" id="save"href="./detail.html?id=${team.id}">Detail</a>
+                    <a class="waves-effect waves-light btn-small teal" id=""href="./detail.html?id=${team.id}">Detail</a>
                 </div>
             </div>    
         `;
@@ -461,60 +461,263 @@ function showTeam(resources) {
     
 }
 
-function getTeambyId() {
-    // Ambil nilai query parameter (?id=)
-    var urlParams = new URLSearchParams(window.location.search);
-    var idParam = urlParams.get("id");
+// function getTeambyId() {
+//     // Ambil nilai query parameter (?id=)
+//     var urlParams = new URLSearchParams(window.location.search);
+//     var idParam = urlParams.get("id");
     
-    fetch(ENDPOINT_TEAMS + "/" + idParam)
-      .then(status)
-      .then(json)
-      .then(function(data) {
-        // Objek JavaScript dari response.json() masuk lewat variabel data.
-        console.log(data);
+//     fetchAPI(`${BASE_URL}teams/${idParam}`)
+//       .then(status)
+//       .then(json)
+//       .then(function(data) {
+//         // Objek JavaScript dari response.json() masuk lewat variabel data.
+//         console.log(data);
         // Menyusun komponen card artikel secara dinamis
-        data.teams.forEach(function (team) {
-        var detailHTML = `
-            <div class="card hoverable s12 m5">
-                <div class="card-content ">
-                <div class="center" style="cursor:pointer;" onclick="loadTeam(${team.id})"><img width="128"  src="${team.crestUrl}"></div>
-                    <div class="center flow-text">${team.name}</div>
-                    <div class="center">${team.area.name}</div>
-                    <div class="center"><a href="${team.website}" target="_blank">${team.website}</a></div>
-                    <div class="center">${team.area.name}</div>
-                </div>
-                <div class="card-action right-align">
-                    <a class="waves-effect waves-light btn-small teal" id="save"href="./detail.html?id=${team.id}">Detail</a>
-                </div>
-            </div>    
-          `;
-        });
-        // Sisipkan komponen card ke dalam elemen dengan id #content
-        document.getElementById("body-content").innerHTML `${detailHTML}`;
-      });
-  }
-
-// function getTeamsByID() {
-    
-//       // Ambil nilai query parameter (?id=)
-//       const urlParams = new URLSearchParams(window.location.search);
-//       const idParam = urlParams.get("id");
-//       if ("caches" in window) {
-//         caches.match(`${ENDPOINT_TEAMS}/${idParam}`).then(function (response) {
-//             if (response) {
-//                 response.json().then(function (data) {
-//                     console.log("Teams Data: " + data);
-                    
-//                 })
-//             }
-//         })
-//     }
-
-//       fetchAPI(`${ENDPOINT_TEAMS}/${idParam}`)
-//       .then(data => {
-//         showStandingbyId(data);
+        // data.teams.forEach(function (team) {
+        // var detailHTML = `
+        //     <div class="card hoverable s12 m5">
+        //         <div class="card-content ">
+        //         <div class="center" style="cursor:pointer;" onclick="loadTeam(${team.id})"><img width="128"  src="${team.crestUrl}"></div>
+        //             <div class="center flow-text">${team.name}</div>
+        //             <div class="center">${team.area.name}</div>
+        //             <div class="center"><a href="${team.website}" target="_blank">${team.website}</a></div>
+        //             <div class="center">${team.area.name}</div>
+        //         </div>
+        //         <div class="card-action right-align">
+        //             <a class="waves-effect waves-light btn-small teal" id="save"href="./detail.html?id=${team.id}">Detail</a>
+        //         </div>
+        //     </div>    
+        //   `;
+        // });
+        // // Sisipkan komponen card ke dalam elemen dengan id #content
+        // document.getElementById("body-content").innerHTML `${detailHTML}`;
+    //   });
+//     .then(data => {
+//         console.log(data);
 //     })
 //     .catch(error => {
 //         console.log(error)
 //     })
+//   }
+// function getTeambyId() {
+//     // Ambil nilai query parameter (?id=)
+//     var urlParams = new URLSearchParams(window.location.search);
+//     var idParam = urlParams.get("id");
+    
+//     fetchAPI(`${BASE_URL}teams/${idParam}`)
+//       .then(status)
+//       .then(json)
+//       .then(function(data) {
+//         // Objek JavaScript dari response.json() masuk lewat variabel data.
+//         console.log(data);
+//         // Menyusun komponen card artikel secara dinamis
+//         var detailHTML = `
+//             <div class="card hoverable s12 m5">
+//                 <div class="card-content ">
+//                 <div class="center" style="cursor:pointer;" onclick="loadTeam(${team.id})"><img width="128"  src="${team.crestUrl}"></div>
+//                     <div class="center flow-text">${team.name}</div>
+//                     <div class="center">${team.area.name}</div>
+//                     <div class="center"><a href="${team.website}" target="_blank">${team.website}</a></div>
+//                     <div class="center">${team.area.name}</div>
+//                 </div>
+//                 <div class="card-action right-align">
+//                     // <a class="waves-effect waves-light btn-small teal" id="save"href="./detail.html?id=${team.id}">Detail</a>
+//                 </div>
+//             </div>    
+//           `;
+//         // Sisipkan komponen card ke dalam elemen dengan id #content
+//         document.getElementById("body-content").innerHTML = detailHTML;
+//       });
+//   }
+function getTeamById() {
+    
+      // Ambil nilai query parameter (?id=)
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   const idParam = urlParams.get("id");
+    //   if ("caches" in window) {
+    //     caches.match(`${BASE_URL}teams/${idParam}`).then(function (response) {
+    //         if (response) {
+    //             response.json().then(function (data) {
+    //                 console.log("Teams Data: " + data);
+                    
+    //             })
+    //         }
+    //     })
+    // }
+
+    //   fetchAPI(`${BASE_URL}teams/${idParam}`)
+    //   .then(data => {
+    //     console.log(data);
+    //     detailHTML += `
+    //         <div class="card hoverable s12 m5">
+    //             <div class="card-content ">
+    //             <div class="center" style="cursor:pointer;" onclick="loadTeam(${team.id})"><img width="128"  src="${team.crestUrl}"></div>
+    //                 <div class="center flow-text">${team.name}</div>
+    //                 <div class="center">${team.area.name}</div>
+    //                 <div class="center"><a href="${team.website}" target="_blank">${team.website}</a></div>
+    //             </div>
+    //             <div class="card-action right-align">
+    //                 <a class="waves-effect waves-light btn-small teal" id="save"href="./detail.html?id=${team.id}">Detail</a>
+    //             </div>
+    //         </div>    
+    //     `;
+    //     document.getElementById("body-content").innerHTML = articleHTML;
+    // })
+    // .catch(error => {
+    //     console.log(error)
+    // })
+    return new Promise(function(resolve, reject) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idParam = urlParams.get("id");
+
+    if ("caches" in window) {
+        caches.match(`${BASE_URL}teams/${idParam}`).then(function (response) {
+            if (response) {
+                response.json().then(function (data) {
+                    console.log("Team Data: " + data);
+                    showDetail(data);
+                    resolve(data);
+                })
+            }
+        })
+    }
+
+    fetch(`${BASE_URL}teams/${idParam}`,{
+        headers: {
+            'X-Auth-Token': API_KEY
+        }
+    })
+    .then(res=>{
+        return res.json()
+    })
+    .then(data=>{
+        showDetail(data);
+        resolve(data);
+    })
+        // .then(team => {
+        //     detailTeamHTML(data);
+        //     console.log(team);
+        //     let teamsDetail = document.getElementById("body-content");
+        //     let teams = `
+        //     <tr>
+        //         <td>${team.id}</td>
+        //         <td>${team.name}</td>
+        //         <td>${team.address}</td>
+        //         <td>${team.phone}</td>
+        //         <td><a href = "${team.website}" target="blank">${team.website}</td>
+        //         <td>${team.email}</td>
+        //         <td>${team.clubColors}</td>
+        //     </tr>
+        // `;
+        
+        // teamsDetail.innerHTML = `
+        //             <div class="card" style="padding-left: 24px; padding-right: 24px; margin-top: 30px;">
+        //             <table class="highlight responsive-table">
+        //                     <thead class="blue-grey lighten-3">
+        //                     <tr class="darken-2 z-depth-1">
+        //                         <th>Club ID</th>
+        //                         <th>Club Name</th>
+        //                         <th>Address</th>
+        //                         <th>Phone</th>
+        //                         <th>Website</th>
+        //                         <th>Email</th>
+        //                         <th>Club Color</th>
+        //                     </tr>
+        //                  </thead>
+        //                 <tbody id="standings">
+        //                     ${teams}
+        //                 </tbody>
+        //             </table>
+        //             <a id="save" class="waves-effect waves-light btn-small teal centered" style="margin: 15px 0px;" href="./detail.html?id=${team.id}">Tambahkan</a>
+        //             </div>
+        // `;
+        // })
+        // .catch(error => {
+        //     console.log(error)
+        })
+          
+}
+// function detailTeamHTML(data) {
+//     let dataSquadHTML = ''
+//     let tabelSquadHTML = ''
+//     data = JSON.parse(JSON.stringify(data).replace(/^http:\/\//i, 'https://'));
+
+//     document.getElementById("namaTeam").innerHTML = data.name;
+//     document.getElementById("area").innerHTML = data.area.name;
+//     document.getElementById("logoTeam").src = data.crestUrl;
+    
+//     data.squad.forEach(function(squad) {
+//         dataSquadHTML += `
+//             <tr>
+//                 <td>${squad.name}</td>
+//                 <td>${squad.position}</td>
+//                 <td>${squad.nationality}</td>
+//             </tr>
+//         `
+//     });
+//     tabelSquadHTML += `
+//         <div class="card-player">
+//             <div class="card s12"> 
+//                 <table>
+//                     <thead>
+//                         <tr>
+//                             <th width="33%">Player Name</th>
+//                             <th width="33%">Position</th>
+//                             <th width="33%">Nationality</th>
+//                         <tr>
+//                     </thead>
+//                     <tbody> ${dataSquadHTML}</tbody>
+//                 </table>
+//             </div>
+//         </div>
+//     `
+//     document.getElementById("detailTeam").innerHTML = tabelSquadHTML;
 // }
+
+function showDetail(data) {
+    let teamsDetail = document.getElementById("body-content");
+    data = JSON.parse(JSON.stringify(data).replace(/^http:\/\//i, 'https://'));
+
+    let teams = `
+            <tr>
+                <td>${data.id}</td>
+                <td>${data.name}</td>
+                <td>${data.address}</td>
+                <td>${data.phone}</td>
+                <td><a href = "${data.website}" target="blank">${data.website}</td>
+                <td>${data.email}</td>
+                <td>${data.clubColors}</td>
+            </tr>
+        `;
+
+    teamsDetail.innerHTML = `
+                    <div class="card" style="padding-left: 24px; padding-right: 24px; margin-top: 30px;">
+                    <table class="highlight responsive-table">
+                            <thead class="blue-grey lighten-3">
+                            <tr class="darken-2 z-depth-1">
+                                <th>Club ID</th>
+                                <th>Club Name</th>
+                                <th>Address</th>
+                                <th>Phone</th>
+                                <th>Website</th>
+                                <th>Email</th>
+                                <th>Club Color</th>
+                            </tr>
+                         </thead>
+                        <tbody id="standings">
+                            ${teams}
+                        </tbody>
+                    </table>
+                    <a id="save" class="waves-effect waves-light btn-small teal centered" style="margin: 15px 0px;" >Tambahkan</a>
+                    </div>
+        `;
+        var item = getTeamById();
+        var save = document.getElementById("save");
+        save.onclick = function () {
+            console.log("Tombol FAB di klik.");
+            item.then(function (article) {
+                addFavTeam(article);
+            });
+        }
+
+}
