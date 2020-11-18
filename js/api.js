@@ -1,5 +1,6 @@
 
-const API_KEY = "12d909c11f6e43faaf6b24ea020d3b34";
+// const API_KEY = "12d909c11f6e43faaf6b24ea020d3b34";
+const API_KEY = "e0a4841c03bd425da42f716f65100c46";
 const BASE_URL = "https://api.football-data.org/v2/";
 
 const LEAGUE_ID = 2014;
@@ -574,7 +575,7 @@ function getTeamById() {
         caches.match(`${BASE_URL}teams/${idParam}`).then(function (response) {
             if (response) {
                 response.json().then(function (data) {
-                    console.log("Team Data: " + data);
+                    
                     showDetail(data);
                     resolve(data);
                 })
@@ -715,9 +716,11 @@ function showDetail(data) {
         var save = document.getElementById("save");
         save.onclick = function () {
             console.log("Tombol FAB di klik.");
-            item.then(function (article) {
-                addFavTeam(article);
+            item.then(function (data) {
+                addFavTeam(data);
             });
         }
 
 }
+
+
